@@ -1,0 +1,71 @@
+@import "tailwindcss";
+@tailwind utilities;
+
+@theme {
+  --color-primary: #dbeaca;
+  --color-search: #afbe9e;
+  --color-oliveLight: "#36460A";
+  --color-oliveDark: "#101500";
+  --color-olive: "#759719";
+  --color-oliveGreen: "#89AF20";
+  --color-oliveHover: "#C6FC2B";
+  --color-yellow: "#CDB30A";
+  --color-primary-dark: #334209;
+  --color-search-dark: #1e2607;
+  --color-primaryText: #333333;
+  --color-primaryText-dark: #e5e5e5;
+  --color-primaryBorder: #707070;
+  --color-primaryBorder-dark: #1e2607;
+  --color-primaryTab: #d4d4d4;
+  --color-primaryTabText: #797474;
+  --color-primaryTabText-active: #000000;
+  --color-primaryTab-active: #ffffff;
+
+  --color-primaryTab-dark: #1e2607;
+  --color-primaryTabText-dark: #e5e5e5;
+  --color-primaryTabText-active-dark: #e5e5e5;
+  --color-primaryTab-active-dark: #334209;
+
+  --color-black: #333333;
+}
+
+body {
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Style the entire website's scrollbar */
+::-webkit-scrollbar {
+  width: 2px; /* Set the width of the scrollbar */
+  height: 0px; /* Set the height for horizontal scrollbar (if any) */
+}
+
+/* Style the track (the background of the scrollbar) */
+::-webkit-scrollbar-track {
+  background: #999; /* Light gray track color */
+  border-radius: 10px; /* Rounded corners for the track */
+}
+
+/* Style the thumb (the draggable part of the scrollbar) */
+::-webkit-scrollbar-thumb {
+  background: #101500; /* Dark gray thumb color */
+  border-radius: 10px; /* Rounded corners for the thumb */
+}
+
+/* Style the thumb when it's being hovered */
+::-webkit-scrollbar-thumb:hover {
+  background: #0f5a02; /* Darker color when hovered */
+}
+
+/* Optional: Style for the corner where the vertical and horizontal scrollbars meet */
+::-webkit-scrollbar-corner {
+  background: #f1f1f1;
+}
+@media (max-width: 600px) {
+  ::-webkit-scrollbar {
+    width: 0px; /* Set the width of the scrollbar */
+    height: 0px; /* Set the height for horizontal scrollbar (if any) */
+  }
+}
