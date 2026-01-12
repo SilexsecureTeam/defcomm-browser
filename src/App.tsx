@@ -1,12 +1,14 @@
-// src/App.tsx
 import { useEffect } from "react";
 import "./App.css";
 import BrowserView from "./layout/BrowserView";
 import NavigationBar from "./layout/NavigationBar";
 import { useTabStore } from "./stores/tabStore";
+import { useTauriUpdater } from "./hooks/useTauriUpdater";
+import UpdateModal from "./components/UpdateModal";
 
 function App() {
   const { loadFromStore, isLoaded } = useTabStore();
+  const { update } = useTauriUpdater();
 
   useEffect(() => {
     loadFromStore();
@@ -25,6 +27,8 @@ function App() {
 
   return (
     <div className="h-screen flex flex-col">
+      {update && <UpdateModal version={update.version} notes={update.notes} />}
+
       <NavigationBar />
       <main className="flex-1">
         <BrowserView />

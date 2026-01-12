@@ -37,6 +37,22 @@
       "icons/128x128/1x/1 @1x.png",
       "icons/128x128/2x/1@2x.png",
       "icons/icon.png"
-    ]
+    ],
+    "createUpdaterArtifacts": true
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDhBNjU5OTIyQ0IzRDA1QUEKUldTcUJUM0xJcGxsaW91aXVVRWtqTWJjVElNdmRNSjBKVHk5SFVveHN2ZFF5cFRoYUdWVzgxVlQK",
+      "endpoints": [
+        "https://github.com/SilexsecureTeam/defcomm-browser/raw/main/latest.json"
+      ],
+      "windows": {
+        "installMode": "passive"
+      },
+      "macOS": {
+        "minimumSystemVersion": "11.0",
+        "signingIdentity": "Developer ID Application"
+      }
+    }
   }
 }
