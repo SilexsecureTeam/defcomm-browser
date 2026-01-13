@@ -36,10 +36,6 @@ async fn eval_in_webview(app: AppHandle, label: String, script: String) -> Resul
     eval_on_label(&app, &label, &script)?;
     Ok("Script executed successfully (result ignored)".to_string())
 }
-
-/// Evaluate arbitrary JS in the target webview and return a **JSON string**.
-/// - Always JSON.stringify() the result inside the page.
-/// - Use a timeout so the command never hangs if page can’t emit.
 #[tauri::command]
 async fn get_page_properties(
     app: AppHandle,

@@ -23,6 +23,7 @@
     "core:webview:allow-set-webview-focus",
     "core:webview:allow-set-webview-size",
     "core:webview:allow-internal-toggle-devtools",
+    "core:webview:allow-create-webview-window",
     "core:event:allow-emit",
     "core:event:allow-listen",
     "updater:default"
