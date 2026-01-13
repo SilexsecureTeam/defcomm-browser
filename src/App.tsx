@@ -3,7 +3,7 @@ import BrowserView from "./layout/BrowserView";
 import NavigationBar from "./layout/NavigationBar";
 import { useTabStore } from "./stores/tabStore";
 import { useTauriUpdater } from "./hooks/useTauriUpdater";
-import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
+
 
 function App() {
   const { loadFromStore, isLoaded } = useTabStore();
