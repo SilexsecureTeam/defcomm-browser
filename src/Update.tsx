@@ -9,7 +9,7 @@ function UpdateWebview() {
 
   return (
     <DefcommHUDUpdate
-      update={{ version: update?.version, body: update?.body }}
+      update={update}
       required
     />
   );
