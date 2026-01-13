@@ -3,7 +3,8 @@ import BrowserView from "./layout/BrowserView";
 import NavigationBar from "./layout/NavigationBar";
 import { useTabStore } from "./stores/tabStore";
 import { useTauriUpdater } from "./hooks/useTauriUpdater";
-
+import { getCurrentWindow } from "@tauri-apps/api/window";
+import { Webview } from "@tauri-apps/api/webview";
 
 function App() {
   const { loadFromStore, isLoaded } = useTabStore();
@@ -13,24 +14,25 @@ function App() {
     loadFromStore();
   }, [loadFromStore]);
 
-  // useEffect(() => {
-  //   if (!update) {
-  //     const webview = new WebviewWindow("update-overlay", {
-  //       url: "update.html",
-  //       title: "Update Available",
-  //       width: 400,
-  //       height: 300,
-  //       resizable: false,
-  //       alwaysOnTop: true,
-  //       decorations: false, // Set to false for a clean "overlay" look
-  //       transparent: true,
-  //     });
+  useEffect(() => {
+    if (update) {
+      const mainWindow = getCurrentWindow();
 
-  //     webview.once("tauri://error", (e) => {
-  //       console.error("Failed to create update window", e);
-  //     });
-  //   }
-  // }, [update]);
+      const overlay = new Webview(mainWindow, "update-overlay", {
+        url: "updater/update.html",
+        transparent: true,
+        focus: true,
+        width: 400,
+        height: 300,
+        x: 0,
+        y: 100,
+      });
+
+      mainWindow.onCloseRequested(() => {
+        overlay.close();
+      });
+    }
+  }, [update]);
 
   if (!isLoaded) {
     return (
