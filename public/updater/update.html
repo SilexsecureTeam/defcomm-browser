@@ -19,152 +19,54 @@
 
 <body class="bg-transparent">
 
-    <div id="hud" class="w-full transition-all duration-300">
-        <div class="mx-2 bg-gray-900/90 border border-gray-700 rounded-b-xl shadow-xl backdrop-blur-md overflow-hidden">
-
-            <!-- Header -->
-            <div
-                class="bg-gray-800/70 px-5 py-3 flex items-center justify-between border-b border-gray-700 animate-pulse">
-                <div class="flex items-center gap-3">
-                    <div class="p-2 bg-gray-700/40 rounded-lg">
-                        ⬇
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-semibold text-green-400 tracking-wider">
-                            DEFCOMM UPDATE
-                        </h3>
-                        <p id="requiredBadge" class="text-xs text-gray-400 uppercase">Required</p>
-                    </div>
-                </div>
-
-                <button id="closeBtn" class="hidden text-gray-400 hover:text-green-400">
-                    ✕
-                </button>
+    <div id="updateModal" class=" bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-gray-900 rounded-xl shadow-xl w-[400px] max-w-full p-5 flex flex-col gap-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg font-bold text-green-400">Defcomm Update</h3>
+                <button id="closeBtn" class="text-gray-400 hover:text-green-400">✕</button>
             </div>
 
-            <!-- Content -->
-            <div class="p-5 space-y-4 text-gray-300">
+            <div class="flex justify-between bg-gray-800 text-white rounded-lg p-3 border border-gray-700">
+                <span>New Version</span>
+                <span id="version" class="font-semibold text-green-400"></span>
+            </div>
 
-                <div class="flex justify-between bg-gray-800 rounded-lg p-3 border border-gray-700">
-                    <span>New Version</span>
-                    <span id="version" class="text-green-400 font-semibold"></span>
+            <div id="notesBox" class="hidden border border-gray-700 rounded-lg overflow-hidden">
+                <div class="px-3 py-2 bg-gray-800 border-b border-gray-700 text-gray-400 font-semibold">Release Notes
                 </div>
+                <div id="notes" class="p-3 text-sm max-h-40 overflow-y-auto text-gray-300"></div>
+            </div>
 
-                <div id="notesBox" class="hidden border border-gray-700 rounded-lg overflow-hidden">
-                    <div class="px-3 py-2 bg-gray-800 border-b border-gray-700 text-gray-400">
-                        Release Notes
-                    </div>
-                    <div id="notes" class="p-3 text-sm max-h-32 overflow-y-auto"></div>
+            <div id="progressBox" class="hidden flex flex-col gap-1">
+                <div class="flex justify-between text-xs text-gray-300">
+                    <span>Downloading…</span>
+                    <span id="progressText">0%</span>
                 </div>
-
-                <!-- Progress -->
-                <div id="progressBox" class="hidden space-y-2">
-                    <div class="flex justify-between text-xs">
-                        <span>Downloading…</span>
-                        <span id="progressText">0%</span>
-                    </div>
-                    <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
-                        <div id="progressBar" class="h-full bg-green-400 w-0 transition-all"></div>
-                    </div>
+                <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                    <div id="progressBar" class="h-full bg-green-400 w-0 transition-all"></div>
                 </div>
+            </div>
 
-                <!-- Error -->
-                <div id="errorBox"
-                    class="hidden p-3 bg-red-900/20 border border-red-800 rounded-lg text-red-300 text-sm"></div>
+            <div id="installingBox" class="hidden p-2 text-green-300 text-sm bg-green-900/20 rounded-lg">
+                Installing update… App will restart
+            </div>
 
-                <!-- Installing -->
-                <div id="installingBox" class="hidden p-4 bg-green-900/20 rounded-lg text-green-300 text-sm">
-                    Installing update… App will restart
-                </div>
+            <div id="errorBox" class="hidden p-2 text-red-300 text-sm bg-red-900/20 rounded-lg"></div>
 
-                <!-- Actions -->
-                <div class="flex justify-end gap-3 pt-2">
-                    <button id="laterBtn" class="hidden px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 rounded-lg">
-                        Remind later
-                    </button>
-
-                    <button id="updateBtn"
-                        class="px-5 py-2.5 bg-green-400 text-gray-900 rounded-lg font-semibold hover:bg-green-500">
-                        Update Now
-                    </button>
-                </div>
-
-                <div class="pt-3 border-t border-gray-700 text-center text-xs text-gray-400" id="footer"></div>
-
+            <div class="flex justify-end gap-2">
+                <button id="laterBtn" class="hidden px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-800">Remind
+                    Later</button>
+                <button id="updateBtn"
+                    class="px-5 py-2.5 bg-green-400 rounded-lg font-semibold hover:bg-green-500 text-gray-900">Update
+                    Now</button>
             </div>
         </div>
     </div>
 
+
     <script type="module">
-        import { check, install, relaunch } from "@tauri-apps/plugin-updater";
-
-        const updateBtn = document.getElementById("updateBtn");
-        const laterBtn = document.getElementById("laterBtn");
-        const closeBtn = document.getElementById("closeBtn");
-
-        const progressBox = document.getElementById("progressBox");
-        const progressBar = document.getElementById("progressBar");
-        const progressText = document.getElementById("progressText");
-        const errorBox = document.getElementById("errorBox");
-        const installingBox = document.getElementById("installingBox");
-
-        const versionEl = document.getElementById("version");
-        const notesBox = document.getElementById("notesBox");
-        const notesEl = document.getElementById("notes");
-        const footer = document.getElementById("footer");
-
-        let required = true;
-
-        const update = await check();
-        if (!update) {
-            document.getElementById("hud").remove();
-            throw "No update";
-        }
-
-        versionEl.textContent = "v" + update.version;
-
-        if (update.body) {
-            notesBox.classList.remove("hidden");
-            update.body.split("\n").forEach(line => {
-                const div = document.createElement("div");
-                div.textContent = line;
-                notesEl.appendChild(div);
-            });
-        }
-
-        footer.textContent = required
-            ? "This update is required to continue using Defcomm."
-            : "This update includes improvements.";
-
-        if (!required) {
-            laterBtn.classList.remove("hidden");
-            closeBtn.classList.remove("hidden");
-        }
-
-        updateBtn.onclick = async () => {
-            try {
-                progressBox.classList.remove("hidden");
-
-                await install(event => {
-                    if (event.event === "Progress") {
-                        const percent = Math.round(event.data.downloaded / event.data.total * 100);
-                        progressBar.style.width = percent + "%";
-                        progressText.textContent = percent + "%";
-                    }
-                });
-
-                installingBox.classList.remove("hidden");
-                setTimeout(() => relaunch(), 800);
-
-            } catch (e) {
-                errorBox.textContent = e.toString();
-                errorBox.classList.remove("hidden");
-            }
-        };
-
-        laterBtn.onclick = closeBtn.onclick = () => {
-            document.getElementById("hud").remove();
-        };
+        import { showUpdateModal } from './update.js';
+        showUpdateModal();
     </script>
 
 </body>
