@@ -35,7 +35,7 @@ export default function DefcommHUDUpdate({ update, required = true }: Props) {
       await update.downloadAndInstall((event) => {
         if (event.event === "Progress") {
           const percent = Math.round(
-            (event.data.downloaded / event.data.total) * 100
+            (event.data?.downloaded / event.data?.total) * 100
           );
           setProgress(percent);
         }
