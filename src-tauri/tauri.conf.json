@@ -44,14 +44,10 @@
     "updater": {
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDhBNjU5OTIyQ0IzRDA1QUEKUldTcUJUM0xJcGxsaW91aXVVRWtqTWJjVElNdmRNSjBKVHk5SFVveHN2ZFF5cFRoYUdWVzgxVlQK",
       "endpoints": [
-        "https://github.com/SilexsecureTeam/defcomm-browser/raw/main/latest.json"
+        "https://raw.githubusercontent.com/SilexsecureTeam/defcomm-browser/main/latest.json"
       ],
       "windows": {
         "installMode": "passive"
-      },
-      "macOS": {
-        "minimumSystemVersion": "11.0",
-        "signingIdentity": "Developer ID Application"
       }
     }
   }

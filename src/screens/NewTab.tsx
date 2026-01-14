@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { PiToggleLeftFill } from "react-icons/pi";
 import { useTabStore } from "../stores/tabStore";
+import { quickActions } from "../utils/browserUtil/constants";
 
 export default function NewTab() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -31,7 +32,6 @@ export default function NewTab() {
         }
       }
 
-      // Update the active tab URL (SearchComponent + WebViewManager will handle load)
       updateTabUrl(activeTab, newUrl);
       console.log("[NewTab] Navigating to:", newUrl);
     } catch (error) {
@@ -40,19 +40,24 @@ export default function NewTab() {
     }
   };
 
+  const handleQuickAction = (url: string) => {
+    if (activeTab != null) {
+      updateTab(activeTab, { isLoading: true });
+      updateTabUrl(activeTab, url);
+    }
+  };
+
   return (
-    <div className="h-full bg-white dark:bg-[black] text-black dark:text-primaryTabText-dark">
+    <div className="h-full bg-white dark:bg-[black] text-black dark:text-primaryTabText-dark flex flex-col items-center">
       {/* Main Content */}
-      <main className="flex flex-col items-center justify-center min-h-[80vh] px-4">
+      <main className="flex flex-col items-center justify-center flex-1 w-full px-4">
+        {/* Logo + Title */}
         <div className="flex items-center gap-3 my-10">
-          {/* Light mode logo */}
           <img
             src="/defcomm.png"
             alt="Browser"
             className="w-12 h-12 dark:hidden"
           />
-
-          {/* Dark mode logo */}
           <img
             src="/defcomm-white.png"
             alt="Browser"
@@ -62,7 +67,7 @@ export default function NewTab() {
         </div>
 
         {/* Search Box */}
-        <div className="w-full max-w-2xl mb-16">
+        <div className="w-full max-w-2xl mb-6">
           <form onSubmit={handleSearch} className="relative">
             <div className="relative h-14">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -74,7 +79,7 @@ export default function NewTab() {
                 <img
                   src="/defcomm-white.png"
                   alt="Icon"
-                  className="w-7 dark:block"
+                  className="w-7 hidden dark:block"
                 />
               </div>
               <input
@@ -91,6 +96,26 @@ export default function NewTab() {
               </div>
             </div>
           </form>
+        </div>
+
+        {/* Quick Actions - Professional Tile Layout */}
+        <div className="w-full max-w-5xl mb-12">
+          <div className="flex flex-wrap justify-center gap-5">
+            {quickActions.map((action) => (
+              <button
+                key={action.name}
+                onClick={() => handleQuickAction(action.url)}
+                className="cursor-pointer flex flex-col items-center justify-center w-24 h-24 bg-white dark:bg-gray-900 rounded-3xl shadow-sm hover:shadow-lg transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none"
+              >
+                <div className="flex items-center justify-center w-12 h-12 mb-2 text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-800 rounded-full shadow-sm hover:shadow-md transition-all duration-200">
+                  <action.icon size={20} />
+                </div>
+                <span className="text-[10px] font-medium text-gray-900 dark:text-white text-center line-clamp-1">
+                  {action.name}
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
       </main>
     </div>
